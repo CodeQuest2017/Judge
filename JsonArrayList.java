@@ -11,7 +11,7 @@ public class JsonArrayList<E> extends ArrayList<E> {
 			E next = iterator.next();
 			sb.append("\t" + next + ",\n");
 		}
-		
+		sb.deleteCharAt(sb.length() - 2);
 		return sb.append("];").toString();
 	}
 }
