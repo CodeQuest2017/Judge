@@ -15,11 +15,11 @@ public class Problem {
 		this.map = map;
 	}
 	public String toJson() {
-		out="{\n";
+		out = "{\n";
 		this.map.forEach((k, v) -> {
-			out+="\t\t\""+k+"\""+": "+v+",\n";
+			out += "\t\t\""+k+"\""+": "+v+",\n";
 		});
-		return out+"\t}";
+		return out + "\t}";
 	}
 	public String toString() {
 		return this.toJson();
