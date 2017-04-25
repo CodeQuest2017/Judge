@@ -11,7 +11,9 @@ public class test {
 		options.put("inDir", "../Cases/" + year + "/sample/in/");
 		options.put("outDir", "../Cases/" + year + "/sample/out/");
 		options.put("compileDir", "../" + year + "/" + name + "/");
-		Test2 b = new Test2(num, options);
+		Judge b = new Judge(num, options);
 		b.test();
+		Problem c = b.getProblem();
+		System.out.println(c);
 	}
 }
