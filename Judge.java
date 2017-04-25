@@ -16,6 +16,7 @@ public class Judge {
 	public Judge(int n, Map<String, String> o) {
 		this.prob = n;
 		this.opts = o;
+		this.setDefault();
 	}
 
 	public Judge(int n, Map<String, String> o, Map<String, String> p) {
@@ -24,6 +25,17 @@ public class Judge {
 		p.forEach((k, v) -> {
 			this.data.put(k, v);
 		});
+		this.setDefault();
+	}
+
+	public void setDefault() {
+		this.data.put("hash", "");
+		this.data.put("compileTimeError", "null");
+		this.data.put("runTimeError", "null");
+		this.data.put("lineCountError", "null");
+		this.data.put("expected", "[]");
+		this.data.put("actual", "[]");
+		this.data.put("counter", String.valueOf(0));
 	}
 
 	public Map<String, String> getData() {
@@ -36,18 +48,28 @@ public class Judge {
 
 	public void test() throws Exception {
 		this.num = (("" + this.prob).length() < 2 ? "0" : "") + this.prob;
-		compileProgram();
-		BufferedReader out = new BufferedReader(new InputStreamReader(runProgram()));
+		
+		boolean didNotCompile = compileProgram();
+		if(didNotCompile) return;
+
+		InputStream fileOutput = runProgram();
+		if(fileOutput == null) return;
+
+		BufferedReader out = new BufferedReader(new InputStreamReader(fileOutput));
 		String nextOut = null;
-		List<String> output = new ArrayList<String>();
+		List<String> output = new DataArrayList<String>();
 		while((nextOut = out.readLine()) != null) output.add(nextOut);
 
 		if(output.size() < 1) {
-			Print.red(Ss + "File compiled and ran, but did not produce any output." + Se);
-			System.exit(1);
+			String noOutput = "File compiled and ran, but did not produce any output.";
+			Print.red(Ss + noOutput + Se);
+			this.data.put("lineCountError", ParseJson.escape(noOutput));
+			return;
 		}
 
 		HashMap<Boolean, List<String[]>> result = check(output);
+		if(result == null) return;
+
 		List<String[]> correct = result.get(false);
 		List<String[]> incorrect = result.get(true);
 
@@ -65,8 +87,8 @@ public class Judge {
 
 			Print.red(Ss + howBadIsIt + " test cases failed. Details below." + Se);
 			for(int i = 0, x = incorrect.size(); i < x; i++) {
-					String[] current = incorrect.get(i);
-					Print.red("Line #" + current[0] + ": Expected: " + current[2] + " | Got: " + current[1]);
+				String[] current = incorrect.get(i);
+				Print.red("Line #" + current[0] + ": Expected: " + current[2] + " | Got: " + current[1]);
 			}
 
 		}
@@ -83,19 +105,25 @@ public class Judge {
 		List<String[]> successinfo = new ArrayList<String[]>();
 		List<String[]> failinfo = new ArrayList<String[]>();
 		
-		List<String> input = new ArrayList<String>();
+		List<String> input = new DataArrayList<String>();
 		int numLines = 0;
 		while(scan.hasNext()) {
 			input.add(scan.nextLine());
 			numLines++;
 		}
 
+		// Store both actual and expected (the input)
+		this.data.put("expected", input.toString());
+		this.data.put("actual", actualvals.toString());
+
 		if(actualvals.size() != numLines) {
-			Print.red(Ss + "File compiled and ran, but the number of lines do not match." + Se);
+			String lcError = "File compiled and ran, but the number of lines do not match.";
+			Print.red(Ss + lcError + Se);
 			for(int i = 0; i < actualvals.size(); i++) {
 				Print.blue("Line #" + (i + 1) + ": " +  actualvals.get(i));
 			}
-			System.exit(1);
+			this.data.put("lineCountError", ParseJson.escape(lcError));
+			return null;
 		}
 		
 		for(int i = 0; i < input.size(); i++) {
@@ -112,13 +140,13 @@ public class Judge {
 		return map;
 	}
 
-	private void compileProgram() throws Exception {
+	private boolean compileProgram() throws Exception {
 		String compileDir = (this.opts.containsKey("compileDir") ? this.opts.get("compileDir") : "");
 		
 		byte[] javaBytes = Files.readAllBytes(Paths.get(compileDir + "Prob" + this.num + ".java"));
 		byte[] javaHash = MessageDigest.getInstance("MD5").digest(javaBytes);
 		String hash = DatatypeConverter.printHexBinary(javaHash);
-		this.data.put("hash", '"' + hash + '"');
+		this.data.put("hash", ParseJson.escape(hash));
 		
 		// TODO:
 		// if(this file has a stored hash)
@@ -134,13 +162,18 @@ public class Judge {
 		BufferedReader thisError = new BufferedReader(new InputStreamReader(error));
 		String nextLineOfError = null;
 		boolean hasError = false;
+		StringBuilder theError = new StringBuilder();
 		while((nextLineOfError = thisError.readLine()) != null) {
 			if(!hasError) Print.red(Ss + "Compile-time Error in Prob" + this.num + ".java. Details below:" + Se);
 			hasError = true;
 			Print.red(nextLineOfError);
+			theError.append(nextLineOfError + "\n");
 		}
 		compileProc.waitFor();
-		if(hasError) System.exit(1);
+		if(hasError) {
+			this.data.put("compileTimeError", ParseJson.escape(theError.toString()));
+		}
+		return hasError;
 	}
 
 	private InputStream runProgram() throws Exception {
@@ -151,13 +184,18 @@ public class Judge {
 		BufferedReader thisError = new BufferedReader(new InputStreamReader(error));
 		String nextLineOfError = null;
 		boolean hasError = false;
+		StringBuilder theError = new StringBuilder();
 		while((nextLineOfError = thisError.readLine()) != null) {
 			if(!hasError) Print.red(Ss + "Run-time Error in Prob" + this.num + ".java. Details below:" + Se);
 			hasError = true;
 			Print.red(nextLineOfError);
+			theError.append(nextLineOfError + "\n");
 		}
 		runProc.waitFor();
-		if(hasError) System.exit(1);
+		if(hasError) {
+			this.data.put("runTimeError", ParseJson.escape(theError.toString()));
+			return null;
+		}
 		return runProc.getInputStream();
 	}
 }
