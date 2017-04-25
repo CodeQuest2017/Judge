@@ -29,7 +29,7 @@ public class Judge {
 	}
 
 	public void setDefault() {
-		this.data.put("hash", "");
+		this.data.put("hash", ParseJson.escape(""));
 		this.data.put("compileTimeError", "null");
 		this.data.put("runTimeError", "null");
 		this.data.put("lineCountError", "null");
