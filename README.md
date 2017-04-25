@@ -2,6 +2,12 @@
 
 Offline program to automate the judging of code solutions.
 
+**Note**: In order to use this program, your ProbXX.java files must include a variation of the following such that `args[0]` is used to determine the directory.
+
+```java
+Scanner scan = new Scanner(new File(args[0] + "ProbXX.in.txt"));
+```
+
 ## Usage
 
 Before entering any of these comamands, make sure that your current directory is the Judge directory and that your folder structure follows that of the GitHub organization.
@@ -22,13 +28,13 @@ CodeQuest/
 
 Once these conditions have been met, you can test your code with the command below.
 
-```
+```java
 java test <year> <name> <problem number>
 ```
 
 Example:
 
-```
+```java
 java test 2013 Donovan 3
 ```
 
