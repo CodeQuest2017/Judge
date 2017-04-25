@@ -14,7 +14,7 @@ public class test {
 		
 		Map<String, String> parameters = new LinkedHashMap<String, String>();
 		parameters.put("year", String.valueOf(year));
-		parameters.put("name", '"' + name + '"');
+		parameters.put("name", ParseJson.escape(name));
 		parameters.put("number", String.valueOf(num));
 
 		Judge b = new Judge(num, options, parameters);
