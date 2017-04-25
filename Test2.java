@@ -95,14 +95,9 @@ public class Test2 {
 	private void compileProgram() throws Exception {
 		String compileDir = (this.opts.containsKey("compileDir") ? this.opts.get("compileDir") : "");
 		
-		// This works, just test with file path specified:
-
 		byte[] javaBytes = Files.readAllBytes(Paths.get(compileDir + "Prob" + this.num + ".java"));
 		byte[] javaHash = MessageDigest.getInstance("MD5").digest(javaBytes);
 		Print.blue("Hash of file is: " + DatatypeConverter.printHexBinary(javaHash));
-		
-		// System.exit(0);
-		
 		
 		// TODO:
 		// if(this file has a stored hash)
@@ -128,27 +123,20 @@ public class Test2 {
 	}
 
 	private InputStream runProgram() throws Exception {
-		int c = 0;
 		String cp = (this.opts.containsKey("compileDir") ? "-classpath " + this.opts.get("compileDir") + " " : "");
 		String dir = (this.opts.containsKey("inDir") ? " " + this.opts.get("inDir") : "");
-		// Print.blue("java " + cp + "Prob" + this.num + dir);
-		// System.exit(0);
 		Process runProc = Runtime.getRuntime().exec("java " + cp + "Prob" + this.num + dir);
 		InputStream error = runProc.getErrorStream();
 		BufferedReader thisError = new BufferedReader(new InputStreamReader(error));
 		String nextLineOfError = null;
 		boolean hasError = false;
-		// Print.yellow("Got here " + ++c);
-		// Print.yellow("thisError.readLine() = " + thisError.readLine());
 		while((nextLineOfError = thisError.readLine()) != null) {
 			if(!hasError) Print.red(Ss + "Run-time Error in Prob" + this.num + ".java. Details below:" + Se);
 			hasError = true;
 			Print.red(nextLineOfError);
 		}
 		runProc.waitFor();
-		// Print.yellow("Got here " + ++c);
 		if(hasError) System.exit(1);
-		// Print.yellow("Got here " + ++c);
 		return runProc.getInputStream();
 	}
 }
