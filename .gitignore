@@ -4,3 +4,4 @@ sample/
 *.in.txt
 *.out.txt
 old/
+data/test-*.js
