@@ -3,18 +3,17 @@ import java.util.*;
 import java.io.*;
 
 public class ParseJson {
+    public static Map<String, String> map;
     public static List<Problem> parseJson(String file) throws Exception {
         Scanner scan = new Scanner(new File(file));
-        Map<String, String> map = new HashMap<String, String>();
-        List<Problem> problems = new ArrayList<Problem>();
-        while(scan.hasNextLine()){
+        List<Problem> problems = new JsonArrayList<Problem>();
+        while(scan.hasNextLine()) {
             String next = scan.nextLine();
-            int c = 0;
-            if(next.equals("{")) {
-                System.out.println("Got here at: " + ++c);
+            if(next.indexOf("{") == 1) {
+                map = new LinkedHashMap<String, String>();
                 String keyValuePair = scan.nextLine();
-                while(keyValuePair.indexOf("}") != 0) {
-                    map.put(keyValuePair.substring(keyValuePair.indexOf(": ")), keyValuePair.substring(keyValuePair.indexOf(": ")+1, keyValuePair.length()-1));
+                while(keyValuePair.indexOf("}") != 1) {
+                    map.put(keyValuePair.substring(3, keyValuePair.indexOf(": ")-1), keyValuePair.substring(keyValuePair.indexOf(": ")+2, keyValuePair.length()-1));
                     keyValuePair = scan.nextLine();
                 }
                 Problem prob = new Problem(map);
@@ -24,7 +23,3 @@ public class ParseJson {
         return problems;
     }
 }
-
-// {
-
-// }
