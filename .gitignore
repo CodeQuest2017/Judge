@@ -3,4 +3,4 @@ judge/
 sample/
 *.in.txt
 *.out.txt
-
+old/
