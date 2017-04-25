@@ -1,0 +1,6 @@
+*.class
+judge/
+sample/
+*.in.txt
+*.out.txt
+
