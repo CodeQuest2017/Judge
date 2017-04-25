@@ -52,20 +52,23 @@ public class Judge {
 		List<String[]> incorrect = result.get(true);
 
 		if(incorrect.size() == 0) {
+			
 			Print.green(Ss + "All correct." + Se);
 			for(int i = 0, x = correct.size(); i < x; i++) {
 				String[] current = correct.get(i);
 				Print.green("Line #" + current[0] + ": " + current[1]);
 			}
-			System.exit(0);
-		}
 
-		String howBadIsIt = (correct.size() == 0) ? "All" : "Some";
+		} else {
+			
+			String howBadIsIt = (correct.size() == 0) ? "All" : "Some";
 
-		Print.red(Ss + howBadIsIt + " test cases failed. Details below." + Se);
-		for(int i = 0, x = incorrect.size(); i < x; i++) {
-				String[] current = incorrect.get(i);
-				Print.red("Line #" + current[0] + ": Expected: " + current[2] + " | Got: " + current[1]);
+			Print.red(Ss + howBadIsIt + " test cases failed. Details below." + Se);
+			for(int i = 0, x = incorrect.size(); i < x; i++) {
+					String[] current = incorrect.get(i);
+					Print.red("Line #" + current[0] + ": Expected: " + current[2] + " | Got: " + current[1]);
+			}
+
 		}
 
 	}
@@ -115,7 +118,7 @@ public class Judge {
 		byte[] javaBytes = Files.readAllBytes(Paths.get(compileDir + "Prob" + this.num + ".java"));
 		byte[] javaHash = MessageDigest.getInstance("MD5").digest(javaBytes);
 		String hash = DatatypeConverter.printHexBinary(javaHash);
-		this.data.put("hash", hash);
+		this.data.put("hash", '"' + hash + '"');
 		
 		// TODO:
 		// if(this file has a stored hash)
