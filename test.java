@@ -11,9 +11,20 @@ public class test {
 		options.put("inDir", "../Cases/" + year + "/sample/in/");
 		options.put("outDir", "../Cases/" + year + "/sample/out/");
 		options.put("compileDir", "../" + year + "/" + name + "/");
-		Judge b = new Judge(num, options);
+		
+		Map<String, String> parameters = new LinkedHashMap<String, String>();
+		parameters.put("year", String.valueOf(year));
+		parameters.put("name", '"' + name + '"');
+		parameters.put("number", String.valueOf(num));
+
+		Judge b = new Judge(num, options, parameters);
 		b.test();
+
 		Problem c = b.getProblem();
-		System.out.println(c);
+		
+		List<Problem> d = new JsonArrayList<Problem>();
+		d.add(c);
+		
+		System.out.println(d);
 	}
 }
