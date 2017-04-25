@@ -21,4 +21,63 @@ public class ParseJson {
 		}
 		return problems;
 	}
+	public static String escape(String input) {
+		int x = input.length();
+		if(input == null || x == 0) return "\"\"";
+		StringBuilder sb = new StringBuilder(x + 4);
+
+		sb.append('"');
+
+		for(int i = 0; i < x; i++) {
+			char c = input.charAt(i);
+			
+			if(c == '\\' || c == '"') {
+				sb.append('\\');
+				sb.append(c);
+				continue;
+			}
+
+			if(c == '/') {
+				sb.append('\\');
+				sb.append(c);
+				continue;
+			}
+
+			if(c == '\b') {
+				sb.append("\\b");
+				continue;
+			}
+
+			if(c == '\t') {
+				sb.append("\\t");
+				continue;
+			}
+
+			if(c == '\n') {
+				sb.append("\\n");
+				continue;
+			}
+
+			if(c == '\f') {
+				sb.append("\\f");
+				continue;
+			}
+
+			if(c == '\r') {
+				sb.append("\\r");
+				continue;
+			}
+
+			if(c < ' ') {
+				String t = "000" + Integer.toHexString(c);
+				sb.append("\\u" + t.substring(t.length() - 4));
+			} else {
+				sb.append(c);
+			}
+
+		}
+		
+		sb.append('"');
+		return sb.toString();
+	}
 }
