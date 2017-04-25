@@ -5,16 +5,33 @@ import java.nio.file.*;
 import javax.xml.bind.*;
 import java.math.*;
 
-public class Test2 {
+public class Judge {
 	private int prob;
 	private Map<String, String> opts;
 	private String num;
 	private static final String Ss = "============= ";
 	private static final String Se = " =============";
-	
-	public Test2(int n, Map<String, String> o) {
+	private Map<String, String> data = new LinkedHashMap<String, String>();
+
+	public Judge(int n, Map<String, String> o) {
 		this.prob = n;
 		this.opts = o;
+	}
+
+	public Judge(int n, Map<String, String> o, Map<String, String> p) {
+		this.prob = n;
+		this.opts = o;
+		p.forEach((k, v) -> {
+			this.data.put(k, v);
+		});
+	}
+
+	public Map<String, String> getData() {
+		return this.data;
+	}
+
+	public Problem getProblem() {
+		return new Problem(this.data);
 	}
 
 	public void test() throws Exception {
@@ -97,7 +114,8 @@ public class Test2 {
 		
 		byte[] javaBytes = Files.readAllBytes(Paths.get(compileDir + "Prob" + this.num + ".java"));
 		byte[] javaHash = MessageDigest.getInstance("MD5").digest(javaBytes);
-		Print.blue("Hash of file is: " + DatatypeConverter.printHexBinary(javaHash));
+		String hash = DatatypeConverter.printHexBinary(javaHash);
+		this.data.put("hash", hash);
 		
 		// TODO:
 		// if(this file has a stored hash)
