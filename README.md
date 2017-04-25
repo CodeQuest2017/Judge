@@ -12,7 +12,7 @@ Scanner scan = new Scanner(new File(args[0] + "ProbXX.in.txt"));
 
 Before entering any of these comamands, make sure that your current directory is the Judge directory and that your folder structure follows that of the GitHub organization.
 
-```
+```java
 CodeQuest/
 	- 2012/
 	- 2013/
