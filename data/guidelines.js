@@ -37,5 +37,3 @@ var data = [
 		"counter": 6,
 	}
 ];
-
-

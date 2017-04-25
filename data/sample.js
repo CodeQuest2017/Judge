@@ -23,4 +23,4 @@ var data = [
 		"actual": ["bg"],
 		"counter": 69305,
 	},
-]
+];
