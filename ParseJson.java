@@ -3,7 +3,7 @@ import java.io.*;
 
 public class ParseJson {
 	public static Map<String, String> map;
-	public static List<Problem> parseJson(String file) throws Exception {
+	public static List<Problem> inFile(String file) throws Exception {
 		Scanner scan = new Scanner(new File(file));
 		List<Problem> problems = new JsonArrayList<Problem>();
 		while(scan.hasNextLine()) {
