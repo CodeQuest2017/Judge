@@ -1,0 +1,17 @@
+import java.util.*;
+import java.io.*;
+
+public class test {
+	public static void main(String[] args) throws Exception {
+		Map<String, String> options = new HashMap<String, String>();
+		// Usage: java test 2013 Donovan 16
+		int year = Integer.parseInt(args[0]);
+		String name = args[1];
+		int num = Integer.parseInt(args[2]);
+		options.put("inDir", "../Cases/" + year + "/sample/in/");
+		options.put("outDir", "../Cases/" + year + "/sample/out/");
+		options.put("compileDir", "../" + year + "/" + name + "/");
+		Test2 b = new Test2(num, options);
+		b.test();
+	}
+}
