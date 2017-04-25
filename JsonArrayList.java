@@ -8,10 +8,8 @@ public class JsonArrayList<E> extends ArrayList<E> {
 		sb.append("[\n");
 		
 		while(iterator.hasNext()) {
-			E el = iterator.next();
-			sb.append('\t');
-			sb.append(el == this ? "(this Collection)" : el);
-			sb.append(",\n");
+			E next = iterator.next();
+			sb.append("\t" + next + ",\n");
 		}
 		
 		return sb.append("];").toString();
