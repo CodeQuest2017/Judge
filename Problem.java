@@ -3,7 +3,7 @@ import java.io.*;
 
 public class Problem {
 	private Map<String, String> map;
-	private String out;
+	private StringBuilder out = new StringBuilder();
 	
 	public Problem(Map<String, String> map) {
 		this.setMap(map);
@@ -15,11 +15,12 @@ public class Problem {
 		this.map = map;
 	}
 	public String toJson() {
-		out = "{\n";
+		out.append("{\n");
 		this.map.forEach((k, v) -> {
-			out += "\t\t\""+k+"\""+": "+v+",\n";
+			out.append("\t\t\"" + k + "\"" + ": " + v + ",\n");
 		});
-		return out + "\t}";
+		out.deleteCharAt(out.length() - 2);
+		return out.toString() + "\t}";
 	}
 	public String toString() {
 		return this.toJson();
