@@ -17,13 +17,12 @@ public class Problem{
     public String toJson(){
         out="{\n";
         this.map.forEach((k, v) -> {
-            out+="\t\""+k+"\""+": "+v+",\n";
+            out+="\t\t\""+k+"\""+": "+v+",\n";
         });
-        return out+"}";
+        return out+"\t}";
     }
     public String toString(){
         return this.toJson();
     }
     
 }
-// [ {}, {}, ]
