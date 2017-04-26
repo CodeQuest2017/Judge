@@ -39,3 +39,13 @@ java test 2013 Donovan 3
 ```
 
 > Tests the solution for problem number 3 by Donovan for the 2013 Code Quest.
+
+## Client
+
+The Judge client automatically tests all of the source code files from each year and each team member, then outputs a javascript file containing json to be used as part of the GitHub Pages website. To run the client, simply type:
+
+```java
+java client
+```
+
+And you should be good to go. Remember to run the client every time you want to update the GitHub Pages website.
