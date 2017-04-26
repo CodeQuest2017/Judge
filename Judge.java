@@ -11,6 +11,7 @@ public class Judge {
 	private String num;
 	private static final String Ss = "============= ";
 	private static final String Se = " =============";
+	protected static List<Problem> problems = null;
 	private Map<String, String> data = new LinkedHashMap<String, String>();
 
 	public Judge(int n, Map<String, String> o) {
@@ -26,6 +27,16 @@ public class Judge {
 			this.data.put(k, v);
 		});
 		this.setDefault();
+	}
+
+	public Judge(int n, Map<String, String> o, Map<String, String> p, List<Problem> e) {
+		this.prob = n;
+		this.opts = o;
+		p.forEach((k, v) -> {
+			this.data.put(k, v);
+		});
+		this.setDefault();
+		if(Judge.problems == null) Judge.problems = e;
 	}
 
 	public void setDefault() {
@@ -118,7 +129,7 @@ public class Judge {
 
 		if(actualvals.size() != numLines) {
 			String lcError = "File compiled and ran, but the number of lines do not match.";
-			Print.red(Ss + lcError + Se);
+			Print.blue(Ss + lcError + Se);
 			for(int i = 0; i < actualvals.size(); i++) {
 				Print.blue("Line #" + (i + 1) + ": " +  actualvals.get(i));
 			}
@@ -147,15 +158,30 @@ public class Judge {
 		byte[] javaHash = MessageDigest.getInstance("MD5").digest(javaBytes);
 		String hash = DatatypeConverter.printHexBinary(javaHash);
 		this.data.put("hash", ParseJson.escape(hash));
-		
-		// TODO:
-		// if(this file has a stored hash)
-		// 	if(the hash is the same as the stored hash)
-		// 		do not compile again, return
-		// 	otherwise
-		// 		compile again, continue
-		// otherwise
-		// 	compile again, continue
+		if(Judge.problems != null) {
+			for(Problem p: problems) {
+				Map<String, String> d = p.getMap();
+				boolean a = d.get("year").equals(this.data.get("year"));
+				boolean b = d.get("name").equals(this.data.get("name"));
+				boolean c = d.get("number").equals(this.data.get("number"));
+				if(a && b && c) {
+					if(d.containsKey("hash") && d.get("hash").equals(this.data.get("hash"))) {
+						Print.cyan(Ss + "The same source file has already been judged." + Se);
+						this.data = d;
+						return true;
+					} else {
+						if(d.get("expected").equals(d.get("actual"))) {
+							Print.cyan(Ss + "Note: This problem has already been correctly solved." + Se);
+							this.data.put("counter", String.valueOf(Integer.parseInt(d.get("counter")) - 1));
+						} else {
+							this.data.put("counter", d.get("counter"));
+						}
+					}
+				}
+			}
+		}
+
+		this.data.put("counter", String.valueOf(Integer.parseInt(this.data.get("counter")) + 1));
 		
 		Process compileProc = Runtime.getRuntime().exec("javac " + compileDir + "Prob" + this.num + ".java");
 		InputStream error = compileProc.getErrorStream();

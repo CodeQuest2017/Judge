@@ -19,7 +19,7 @@ public class Problem {
 		this.map.forEach((k, v) -> {
 			out.append("\t\t\"" + k + "\"" + ": " + v + ",\n");
 		});
-		out.deleteCharAt(out.length() - 2);
+		// out.deleteCharAt(out.lastIndexOf(","));
 		return out.toString() + "\t}";
 	}
 	public String toString() {
