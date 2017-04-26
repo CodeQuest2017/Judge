@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class client{
+public class client {
 	private static final String saveFile = "../codequest2017.github.io/data/problems.js";
 	protected static List<Problem> problems;
 	public static void main(String[] args) throws Exception {
@@ -36,7 +36,7 @@ public class client{
 							
 							if(tertiaryList[c].isFile() && tertiaryList[c].getName().indexOf(".java") != -1) {
 								
-								int num = Integer.parseInt(tertiaryList[c].getName().substring(4,6));
+								int num = Integer.parseInt(tertiaryList[c].getName().substring(4, 6));
 								
 								options = new LinkedHashMap<String, String>();
 								options.put("inDir", "../Cases/" + year + "/sample/in/");
