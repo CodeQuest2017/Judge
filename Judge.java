@@ -9,8 +9,8 @@ public class Judge {
 	private int prob;
 	private Map<String, String> opts;
 	private String num;
-	private static final String Ss = "============= ";
-	private static final String Se = " =============";
+	protected static final String Ss = "============= ";
+	protected static final String Se = " =============";
 	protected static List<Problem> problems = null;
 	private Map<String, String> data = new LinkedHashMap<String, String>();
 
@@ -39,7 +39,7 @@ public class Judge {
 		if(Judge.problems == null) Judge.problems = e;
 	}
 
-	public void setDefault() {
+	private void setDefault() {
 		this.data.put("hash", ParseJson.escape(""));
 		this.data.put("compileTimeError", "null");
 		this.data.put("runTimeError", "null");
@@ -106,7 +106,7 @@ public class Judge {
 
 	}
 
-	public HashMap<Boolean, List<String[]>> check(List<String> actualvals) throws Exception {
+	private HashMap<Boolean, List<String[]>> check(List<String> actualvals) throws Exception {
 		String outDir = (this.opts.containsKey("outDir") ? this.opts.get("outDir") : "");
 		Scanner scan = new Scanner(new File(outDir + "Prob" + this.num + ".out.txt"));
 		HashMap<Boolean, List<String[]>> map = new LinkedHashMap<Boolean, List<String[]>>();
