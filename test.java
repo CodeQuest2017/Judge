@@ -20,11 +20,11 @@ public class test {
 		Judge b = new Judge(num, options, parameters);
 		b.test();
 
-		Problem c = b.getProblem();
+		// Problem c = b.getProblem();
 		
-		List<Problem> d = new JsonArrayList<Problem>();
-		d.add(c);
+		// List<Problem> d = new JsonArrayList<Problem>();
+		// d.add(c);
 		
-		System.out.println(d);
+		// System.out.println(d);
 	}
 }
